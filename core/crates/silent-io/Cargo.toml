@@ -1,0 +1,10 @@
+[package]
+name = "silent-io"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Canonical serialization, persistence, and wire encoding layer for SILENT core types."
+
+[dependencies]
+thiserror = "1.0"
+zeroize = { version = "1", features = ["derive"] }

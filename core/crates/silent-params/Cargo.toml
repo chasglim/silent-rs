@@ -1,0 +1,13 @@
+[package]
+name = "silent-params"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Tracked parameter sets and audit-friendly exports for SILENT."
+readme = "README.md"
+
+[dependencies]
+sha2 = "0.10"
+silent-io = { path = "../silent-io" }
+silent-math = { path = "../silent-math" }
+thiserror = "1.0"

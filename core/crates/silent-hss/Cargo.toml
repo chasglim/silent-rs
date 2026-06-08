@@ -1,0 +1,15 @@
+[package]
+name = "silent-hss"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Homomorphic secret sharing primitives for SILENT."
+
+[dependencies]
+silent-io = { path = "../silent-io" }
+silent-math = { path = "../silent-math" }
+silent-params = { path = "../silent-params" }
+silent-ring = { path = "../silent-ring" }
+silent-rlwe = { path = "../silent-rlwe" }
+silent-utils = { path = "../silent-utils" }
+rand = "0.8"

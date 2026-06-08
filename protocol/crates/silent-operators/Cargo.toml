@@ -1,0 +1,19 @@
+[package]
+name = "silent-operators"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Shared encrypted operator abstractions for SILENT protocol."
+
+[dependencies]
+silent-fhe = { path = "../../../core/crates/silent-fhe" }
+silent-hss = { path = "../../../core/crates/silent-hss" }
+silent-lpn = { path = "../../../core/crates/silent-lpn" }
+silent-math = { path = "../../../core/crates/silent-math" }
+silent-params = { path = "../../../core/crates/silent-params" }
+silent-ring = { path = "../../../core/crates/silent-ring" }
+silent-rlwe = { path = "../../../core/crates/silent-rlwe" }
+silent-utils = { path = "../../../core/crates/silent-utils" }
+rand = "0.8"
+rayon = "1.10"
+serde = { version = "1", features = ["derive"] }

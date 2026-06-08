@@ -1,0 +1,33 @@
+[package]
+name = "silent-net"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Local secure transport and network harnesses for SILENT."
+
+[features]
+default = []
+proto = ["dep:prost", "dep:prost-build", "dep:protoc-bin-vendored"]
+quic = ["dep:quinn", "dep:rustls", "dep:rcgen"]
+flatbuffers = ["dep:flatbuffers"]
+crypto-tests = ["dep:silent-ring", "dep:silent-rlwe", "dep:silent-fhe", "dep:silent-params"]
+
+[dependencies]
+silent-io = { path = "../silent-io" }
+tokio = { version = "1.32", features = ["full"] }
+bytes = "1.5"
+async-trait = "0.1"
+thiserror = "1.0"
+prost = { version = "0.12", optional = true }
+flatbuffers = { version = "23.5.26", optional = true }
+quinn = { version = "0.10", optional = true }
+rustls = { version = "0.21", features = ["dangerous_configuration"], optional = true }
+rcgen = { version = "0.13", optional = true }
+silent-ring = { path = "../silent-ring", optional = true }
+silent-rlwe = { path = "../silent-rlwe", optional = true }
+silent-fhe = { path = "../silent-fhe", optional = true }
+silent-params = { path = "../silent-params", optional = true }
+
+[build-dependencies]
+prost-build = { version = "0.12", optional = true }
+protoc-bin-vendored = { version = "3.0", optional = true }

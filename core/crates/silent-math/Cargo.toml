@@ -1,0 +1,21 @@
+[package]
+name = "silent-math"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Math foundations for the SILENT cryptographic core."
+
+[features]
+default = []
+hexl = []
+simd = []
+aarch64-umulh = []
+
+[dependencies]
+rustfft = "6"
+silent-utils = { path = "../silent-utils" }
+subtle = "2"
+
+[build-dependencies]
+cc = "1.0"
+pkg-config = "0.3"

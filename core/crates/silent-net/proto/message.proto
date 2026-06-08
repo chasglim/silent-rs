@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package silent.net;
+
+// Capability negotiation handshake.
+//
+// Generated code is used by `serialize::proto` when the `proto` feature is
+// enabled.  Handshake messages are control-plane only; cryptographic
+// payloads always use the canonical `silent-io` codec.
+message Handshake {
+    // Human-readable node identifier.
+    string node_id = 1;
+    // Feature flags supported by this node.
+    repeated string supported_features = 2;
+}

@@ -1,0 +1,25 @@
+[package]
+name = "silent-fhe"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Fully homomorphic encryption building blocks for SILENT."
+
+[features]
+default = ["blake2b-neon"]
+hexl = ["silent-math/hexl"]
+blake2b-neon = ["silent-utils/blake2b-neon"]
+
+[dependencies]
+silent-io = { path = "../silent-io" }
+silent-math = { path = "../silent-math" }
+silent-params = { path = "../silent-params" }
+silent-ring = { path = "../silent-ring" }
+silent-rlwe = { path = "../silent-rlwe" }
+silent-utils = { path = "../silent-utils" }
+rand = "0.8"
+serde = { version = "1.0", features = ["derive"] }
+thiserror = "1.0"
+rand_core = "0.6"
+num-bigint = "0.4"
+num-traits = "0.2"

@@ -1,0 +1,19 @@
+[package]
+name = "silent"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "SILENT paper experiments and private Transformer inference artifact runners."
+
+[dependencies]
+rand = "0.8"
+silent-hss = { path = "../../../core/crates/silent-hss" }
+silent-math = { path = "../../../core/crates/silent-math" }
+silent-net = { path = "../../../core/crates/silent-net" }
+silent-operators = { path = "../../crates/silent-operators" }
+silent-params = { path = "../../../core/crates/silent-params" }
+silent-protocol-runtime = { path = "../../crates/silent-protocol-runtime" }
+silent-ring = { path = "../../../core/crates/silent-ring" }
+silent-rlwe = { path = "../../../core/crates/silent-rlwe" }
+silent-utils = { path = "../../../core/crates/silent-utils" }
+tokio = { version = "1.32", features = ["rt"] }

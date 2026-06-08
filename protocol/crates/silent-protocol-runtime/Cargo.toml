@@ -1,0 +1,13 @@
+[package]
+name = "silent-protocol-runtime"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Runtime glue for executing SILENT protocols."
+
+[dependencies]
+silent-io = { path = "../../../core/crates/silent-io" }
+silent-net = { path = "../../../core/crates/silent-net" }
+
+[dev-dependencies]
+tokio = { version = "1.32", features = ["macros", "rt"] }

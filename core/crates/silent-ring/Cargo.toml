@@ -1,0 +1,10 @@
+[package]
+name = "silent-ring"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "Internal ring arithmetic support crate for SILENT."
+
+[dependencies]
+silent-io = { path = "../silent-io" }
+silent-math = { path = "../silent-math" }

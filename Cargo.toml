@@ -1,0 +1,22 @@
+[workspace]
+members = [
+  "protocol/crates/silent-operators",
+  "protocol/crates/silent-protocol-runtime",
+  "protocol/examples/silent",
+  "core/crates/silent-fhe",
+  "core/crates/silent-hss",
+  "core/crates/silent-io",
+  "core/crates/silent-lpn",
+  "core/crates/silent-math",
+  "core/crates/silent-net",
+  "core/crates/silent-params",
+  "core/crates/silent-ring",
+  "core/crates/silent-rlwe",
+  "core/crates/silent-utils",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0 OR MIT"

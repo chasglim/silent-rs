@@ -1,0 +1,10 @@
+[package]
+name = "silent-lpn"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+description = "LPN-native code-reconciled HSS kernels for SILENT."
+
+[dependencies]
+silent-math = { path = "../silent-math" }
+rand = "0.8"
