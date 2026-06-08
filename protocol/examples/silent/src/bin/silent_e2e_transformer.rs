@@ -437,6 +437,7 @@ fn private_linear_config(
     input_dim: usize,
     output_dim: usize,
 ) -> PrivateLinearMapConfig {
+    let noise_bound = private_linear_noise_bound();
     PrivateLinearMapConfig {
         input_dim,
         output_dim,
@@ -454,9 +455,16 @@ fn private_linear_config(
             ExperimentMode::Full => input_dim * 2,
         },
         gadget_cols_t: 6,
-        setup_noise_bound: 0,
-        query_noise_bound: 0,
+        setup_noise_bound: noise_bound,
+        query_noise_bound: noise_bound,
     }
+}
+
+fn private_linear_noise_bound() -> i64 {
+    std::env::var("SILENT_E2E_LINEAR_NOISE_BOUND")
+        .ok()
+        .and_then(|value| value.parse::<i64>().ok())
+        .unwrap_or(1)
 }
 
 fn signed_mod(value: i64, p: u64) -> u64 {

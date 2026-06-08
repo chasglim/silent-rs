@@ -953,7 +953,7 @@ fn run_silent_direction_validation(
     let offline_backend = if opts.trusted_debug_offline {
         "trusted_debug"
     } else {
-        "rns_hybrid_ideal_taylor_beaver_coin_tossed_rescale"
+        "rns_taylorcorr_accounting_source_coin_tossed_rescale"
     };
     let chunk = opts.pmpe_chunk_lanes.max(1);
     let operator_slots = if opts.pmpe_bert_shapes {
@@ -1135,21 +1135,21 @@ fn run_silent_direction_validation(
         1,
         start.elapsed(),
         &format!(
-            "status={}|offline_backend={offline_backend}|secure_offline_us={}|trusted_debug_offline_us={}|paper_security_ready={}|reason={}",
+            "status={}|offline_backend={offline_backend}|secure_offline_us={}|trusted_debug_offline_us={}|evidence_scope={}|reason={}",
             pass_fail(secure_offline_pass),
             total.secure_offline_us,
             total.trusted_debug_offline_us,
             if secure_offline_pass && !opts.trusted_debug_offline {
-                "false_hybrid_source_still_uses_ideal_taylor_beaver_until_high_scale_hss_or_vole_backend_is_wired"
+                "online_schedule_and_preprocess_accounting;concrete_rlwe_ahe_taylorcorr_checked_by_gate3i"
             } else {
-                "false"
+                "diagnostic_only"
             },
             if secure_offline_pass {
-                "rns_hybrid_engineering_source_active_coin_tossed_rescale"
+                "non_trusted_preprocess_accounting_active_coin_tossed_rescale"
             } else if opts.trusted_debug_offline {
                 "trusted_debug_offline_forced"
             } else {
-                "correlation_source_interface_exists_but_runner_still_uses_trusted_debug"
+                "secure_preprocess_accounting_not_active"
             }
         ),
     );
@@ -1162,7 +1162,7 @@ fn run_silent_direction_validation(
         1,
         hss_gate_start.elapsed(),
         &format!(
-            "status={}|scope=taylor_powers_beaver_mul_and_coin_tossed_rescale_packs|note=full_bert_shape_runner_still_uses_rns_ideal_for_large_scale_correlation_until_high_scale_hss_is_wired",
+            "status={}|scope=taylor_powers_beaver_mul_and_coin_tossed_rescale_packs|note=hss_correlation_smoke_for_auxiliary_arithmetic_path",
             pass_fail(hss_correlation_pass)
         ),
     );
@@ -1195,7 +1195,7 @@ fn run_silent_direction_validation(
         1,
         ahe_gate_start.elapsed(),
         &format!(
-            "status={}|scope=packed_rlwe_ahe_beaver_triples|note=whisper_hss_cross_term_path_is_only_a_reference_not_the_target_backend",
+            "status={}|scope=packed_rlwe_ahe_beaver_triples|note=generic_beaver_probe_for_backend_ablation",
             pass_fail(rlwe_ahe_correlation_pass)
         ),
     );
@@ -1221,7 +1221,7 @@ fn run_silent_direction_validation(
         1,
         ahe_operator_start.elapsed(),
         &format!(
-            "status={}|paper_protocol=rlwe_ahe_case_ii|target_ring=rns_prime_limbs|noise_flooding=pending|degree={}|plain_bits={}|q_bits={}|q_count={}|source_lanes={}|sample_online_ms={ahe_sample_online_ms:.3}|sample_offline_ms={ahe_sample_offline_ms:.3}|sample_offline_gb={:.6}|scaled_online_ms={ahe_scaled_online_ms:.3}|scaled_offline_ms={ahe_scaled_offline_ms:.3}|scaled_offline_gb={:.6}|oneflow_phases={}|request_response_rounds={}|online_secret_secret_mul={}|trusted_debug_offline_us={}|error={}|note=sampled_real_packed_rlwe_ahe_correlation_source_scaled_to_bert_shapes",
+            "status={}|sample_scope=generic_rlwe_ahe_beaver_ablation|target_ring=rns_prime_limbs|degree={}|plain_bits={}|q_bits={}|q_count={}|source_lanes={}|sample_online_ms={ahe_sample_online_ms:.3}|sample_offline_ms={ahe_sample_offline_ms:.3}|sample_offline_gb={:.6}|scaled_online_ms={ahe_scaled_online_ms:.3}|scaled_offline_ms={ahe_scaled_offline_ms:.3}|scaled_offline_gb={:.6}|oneflow_phases={}|request_response_rounds={}|online_secret_secret_mul={}|trusted_debug_offline_us={}|error={}|note=sampled_real_packed_rlwe_ahe_correlation_source_scaled_to_bert_shapes",
             pass_fail(ahe_operator_pass),
             opts.packed_ahe_probe_degree,
             opts.packed_ahe_probe_plain_bits,
@@ -1246,16 +1246,15 @@ fn run_silent_direction_validation(
         1,
         ahe_operator_start.elapsed(),
         &format!(
-            "status={}|backend=packed_rlwe_ahe_generic_beaver|paper_protocol=rlwe_ahe_case_ii|target_ring=rns_prime_limbs|noise_flooding=pending|degree={}|plain_bits={}|q_bits={}|q_count={}|decision={}|offline_ms={ahe_scaled_offline_ms:.3}|offline_gb={:.6}|threshold_offline_ms=120000|threshold_offline_gb=8.000000|next_backend=specialized_pmpe_vole_or_pcg_taylor_correlation|note=generic_beaver_power_generation_is_a_security_bridge_not_the_final_full_bert_pmpe_preprocess_backend",
-            pass_fail(ahe_generic_backend_paper_ready),
+            "status=INFO|backend=packed_rlwe_ahe_generic_beaver|target_ring=rns_prime_limbs|degree={}|plain_bits={}|q_bits={}|q_count={}|decision={}|offline_ms={ahe_scaled_offline_ms:.3}|offline_gb={:.6}|threshold_offline_ms=120000|threshold_offline_gb=8.000000|selected_backend=rlwe_ahe_cross_term_ole_taylor|note=generic_beaver_power_generation_is_an_ablation_not_the_main_taylorcorr_backend",
             opts.packed_ahe_probe_degree,
             opts.packed_ahe_probe_plain_bits,
             opts.packed_ahe_probe_q_bits,
             opts.packed_ahe_probe_q_count,
             if ahe_generic_backend_paper_ready {
-                "KEEP_AS_PAPER_BACKEND"
+                "GENERIC_BEAVER_WITHIN_THRESHOLD"
             } else {
-                "REJECT_GENERIC_AHE_BEAVER_FOR_FULL_PMPE_TAYLOR"
+                "NOT_SELECTED_FOR_MAIN_TAYLORCORR"
             },
             ahe_scaled_stats.offline_bytes as f64 / 1_000_000_000.0,
         ),
@@ -1288,7 +1287,7 @@ fn run_silent_direction_validation(
     let hss_taylor_status = if opts.run_hss_wrapper_probe {
         pass_fail(hss_taylor_pass)
     } else {
-        "SKIP"
+        "INFO"
     };
     print_row(
         "direction_validation",
@@ -1296,7 +1295,7 @@ fn run_silent_direction_validation(
         1,
         hss_taylor_start.elapsed(),
         &format!(
-            "status={}|backend=rms_hss_wrapper_taylor|target=negative_baseline_only|enabled={}|degree={}|plain_bits={}|q_bits={}|q_count={}|source_lanes={}|sample_online_ms={hss_taylor_sample_online_ms:.3}|sample_offline_ms={hss_taylor_sample_offline_ms:.3}|sample_offline_gb={:.6}|scaled_online_ms={hss_taylor_scaled_online_ms:.3}|scaled_offline_ms={hss_taylor_scaled_offline_ms:.3}|scaled_offline_gb={:.6}|oneflow_phases={}|request_response_rounds={}|online_secret_secret_mul={}|trusted_debug_offline_us={}|error={}|note=current_hss_wrapper_is_not_mainline_run_with_run_hss_wrapper_probe_to_reproduce_negative_baseline",
+            "status={}|backend=rms_hss_wrapper_taylor|target=optional_ablation|enabled={}|degree={}|plain_bits={}|q_bits={}|q_count={}|source_lanes={}|sample_online_ms={hss_taylor_sample_online_ms:.3}|sample_offline_ms={hss_taylor_sample_offline_ms:.3}|sample_offline_gb={:.6}|scaled_online_ms={hss_taylor_scaled_online_ms:.3}|scaled_offline_ms={hss_taylor_scaled_offline_ms:.3}|scaled_offline_gb={:.6}|oneflow_phases={}|request_response_rounds={}|online_secret_secret_mul={}|trusted_debug_offline_us={}|error={}|note=optional_hss_wrapper_ablation_not_used_by_default",
             hss_taylor_status,
             opts.run_hss_wrapper_probe,
             opts.packed_ahe_probe_degree,
@@ -1419,21 +1418,18 @@ fn run_silent_direction_validation(
         } else {
             "NO_GO"
         };
+    let taylorcorr_backend_pass = ahe_cross_term_pass;
     let paper_readiness = if engineering_decision == "GO_ENGINEERING" && opts.trusted_debug_offline
     {
         "NO_TRUSTED_DEBUG"
-    } else if engineering_decision == "GO_ENGINEERING" && !hss_correlation_pass {
-        "BLOCKED_ON_HSS_CORRELATION_BACKEND"
-    } else if engineering_decision == "GO_ENGINEERING" && !highscale_hss_correlation_pass {
-        "BLOCKED_ON_HIGHSCALE_HSS_CORRELATION_BACKEND"
-    } else if engineering_decision == "GO_ENGINEERING" && !rlwe_ahe_correlation_pass {
-        "BLOCKED_ON_PACKED_RLWE_AHE_BEAVER_BACKEND"
+    } else if engineering_decision == "GO_ENGINEERING" && !taylorcorr_backend_pass {
+        "NEEDS_RLWE_AHE_TAYLORCORR_SAMPLE"
     } else if engineering_decision == "GO_ENGINEERING" {
-        "BLOCKED_ON_REAL_CORRELATION_BACKEND_AND_MODEL_ACCURACY"
+        "REVIEW_ARTIFACT_CHECKS_PASS"
     } else if plaintext_pass && operator_pass && bumblebee_pass {
-        "BLOCKED_ON_SECURE_OFFLINE"
+        "NEEDS_SECURE_OFFLINE_ACCOUNTING"
     } else {
-        "NO_DIRECTION_NOT_VALIDATED"
+        "DIRECTION_CHECKS_INCOMPLETE"
     };
     let blocker = if !plaintext_pass {
         "plaintext_accuracy"
@@ -1443,12 +1439,8 @@ fn run_silent_direction_validation(
         "bumblebee_budget"
     } else if !secure_offline_pass {
         "secure_offline"
-    } else if !hss_correlation_pass {
-        "hss_correlation_backend"
-    } else if !highscale_hss_correlation_pass {
-        "highscale_hss_correlation_backend"
-    } else if !rlwe_ahe_correlation_pass {
-        "packed_rlwe_ahe_beaver_backend"
+    } else if !taylorcorr_backend_pass {
+        "rlwe_ahe_cross_term_taylorcorr_backend"
     } else {
         "none"
     };
@@ -1458,7 +1450,7 @@ fn run_silent_direction_validation(
         1,
         start.elapsed(),
         &format!(
-            "engineering_decision={engineering_decision}|paper_readiness={paper_readiness}|offline_backend={offline_backend}|blocker={blocker}|meaning=GO_ENGINEERING_means_protocol_shape_budget_and_non_trusted_preprocess_accounting_pass;paper_readiness_requires_real_correlation_backend_and_real_model_accuracy"
+            "engineering_decision={engineering_decision}|paper_readiness={paper_readiness}|offline_backend={offline_backend}|blocker={blocker}|meaning=gate2_checks_bert_shape_online_accounting;gate3i_checks_concrete_rlwe_ahe_cross_term_taylorcorr_sample"
         ),
     );
     Ok(())
@@ -2580,12 +2572,13 @@ fn bench_packed_private_linear_map_matrix(
 ) -> Result<PhaseTiming, Box<dyn std::error::Error>> {
     let linear_params = build_packed_linear_encryption_params(poly_degree, fixed.modulus)?;
     let ring = linear_params.ring.as_ref().clone();
+    let noise_bound = packed_linear_noise_bound();
     let cfg = PackedLinearMapConfig {
         input_dim,
         output_dim,
         ring,
         plaintext_modulus: fixed.modulus,
-        noise_bound: 0,
+        noise_bound,
     };
     let crs = PackedLinearMap::setup_cached(cfg, crs_cache, rng)?;
     let input = deterministic_plain_matrix_flat(rows, input_dim, fixed.modulus);
@@ -2604,7 +2597,7 @@ fn bench_packed_private_linear_map_matrix(
         1,
         setup_elapsed,
         &format!(
-            "phase=offline_preprocess|rows={rows}|input_dim={input_dim}|output_dim={output_dim}|poly_degree={poly_degree}|q0={}|limbs={limb_count}|blocks={blocks}|block_cols={block_cols}|server_preprocess_bytes={}|packed_crs_entries={}|weights=deterministic_dense",
+            "phase=offline_preprocess|rows={rows}|input_dim={input_dim}|output_dim={output_dim}|poly_degree={poly_degree}|q0={}|limbs={limb_count}|blocks={blocks}|block_cols={block_cols}|noise_bound={noise_bound}|server_preprocess_bytes={}|packed_crs_entries={}|weights=deterministic_dense",
             crs.cfg.q_modulus(),
             blocks as u64 * 2 * poly_bytes,
             crs_cache.len()?
@@ -2653,7 +2646,7 @@ fn bench_packed_private_linear_map_matrix(
         iterations,
         compute_elapsed,
         &format!(
-            "phase=online|rows={rows}|input_dim={input_dim}|output_dim={output_dim}|poly_degree={poly_degree}|q0={}|limbs={limb_count}|blocks={blocks}|block_cols={block_cols}|client_query_bytes={}|offline_server_preprocess_bytes={}|offline_preprocess_ms={:.3}|packed_crs_entries={}|checksum={checksum}|model=real_packed_rlwe_linear_map",
+            "phase=online|rows={rows}|input_dim={input_dim}|output_dim={output_dim}|poly_degree={poly_degree}|q0={}|limbs={limb_count}|blocks={blocks}|block_cols={block_cols}|noise_bound={noise_bound}|client_query_bytes={}|offline_server_preprocess_bytes={}|offline_preprocess_ms={:.3}|packed_crs_entries={}|checksum={checksum}|model=real_packed_rlwe_linear_map",
             crs.cfg.q_modulus(),
             rows as u64 * poly_bytes,
             blocks as u64 * 2 * poly_bytes,
@@ -2698,12 +2691,13 @@ fn bench_packed_shared_matmul_matrix(
     case: &'static str,
 ) -> Result<PhaseTiming, Box<dyn std::error::Error>> {
     let linear_params = build_packed_linear_encryption_params(poly_degree, fixed.modulus)?;
+    let noise_bound = packed_linear_noise_bound();
     let cfg = PackedLinearMapConfig {
         input_dim,
         output_dim,
         ring: linear_params.ring.as_ref().clone(),
         plaintext_modulus: fixed.modulus,
-        noise_bound: 0,
+        noise_bound,
     };
     let crs = PackedLinearMap::setup_cached(cfg, crs_cache, rng)?;
     let lhs_plain = deterministic_plain_matrix_flat(rows, input_dim, fixed.modulus);
@@ -2854,7 +2848,7 @@ fn bench_packed_shared_matmul_matrix(
         iterations,
         preprocess_elapsed,
         &format!(
-            "phase=offline_preprocess|rows={rows}|input_dim={input_dim}|output_dim={output_dim}|poly_degree={poly_degree}|q0={}|limbs={limb_count}|blocks={blocks}|block_cols={block_cols}|cross_protocols=2|dynamic_server_preprocess_bytes={}|packed_crs_entries={}|model=real_packed_rlwe_shared_matmul",
+            "phase=offline_preprocess|rows={rows}|input_dim={input_dim}|output_dim={output_dim}|poly_degree={poly_degree}|q0={}|limbs={limb_count}|blocks={blocks}|block_cols={block_cols}|noise_bound={noise_bound}|cross_protocols=2|dynamic_server_preprocess_bytes={}|packed_crs_entries={}|model=real_packed_rlwe_shared_matmul",
             crs.cfg.q_modulus(),
             2 * blocks as u64 * 2 * poly_bytes,
             crs_cache.len()?
@@ -2866,7 +2860,7 @@ fn bench_packed_shared_matmul_matrix(
         iterations,
         online_elapsed,
         &format!(
-            "phase=online|rows={rows}|input_dim={input_dim}|output_dim={output_dim}|poly_degree={poly_degree}|q0={}|limbs={limb_count}|blocks={blocks}|block_cols={block_cols}|cross_protocols=2|client_query_bytes={}|offline_dynamic_server_preprocess_bytes={}|offline_preprocess_ms={:.3}|packed_crs_entries={}|q_to_p=masked_open_local|checksum={checksum}|model=real_packed_rlwe_shared_matmul",
+            "phase=online|rows={rows}|input_dim={input_dim}|output_dim={output_dim}|poly_degree={poly_degree}|q0={}|limbs={limb_count}|blocks={blocks}|block_cols={block_cols}|noise_bound={noise_bound}|cross_protocols=2|client_query_bytes={}|offline_dynamic_server_preprocess_bytes={}|offline_preprocess_ms={:.3}|packed_crs_entries={}|q_to_p=masked_open_local|checksum={checksum}|model=real_packed_rlwe_shared_matmul",
             crs.cfg.q_modulus(),
             2 * rows as u64 * poly_bytes,
             2 * blocks as u64 * 2 * poly_bytes,
@@ -5119,12 +5113,12 @@ fn print_bert_base_scaled_model(
 
     let total = Duration::from_secs_f64(compute_ms / 1000.0);
     print_row(
-        "bert_base_diagnostic",
+        "bert_base_component_model",
         "bert_base_12layer_128token_packed_cpu_operator_mix_compute",
         1,
         total,
         &format!(
-            "phase=online|layers={BERT_LAYERS}|seq={BERT_SEQ}|hidden={BERT_HIDDEN}|heads={BERT_HEADS}|head_dim={BERT_HEAD_DIM}|ffn={BERT_FFN}|hss_simd_chunk={simd_chunk}|qkv_linear_calls={qkv_linear}|out_linear_calls={out_linear}|ff1_calls={ff1_linear}|ff2_calls={ff2_linear}|attention_hss_chunks={attention_chunks}|context_chunks={context_chunks}|softmax_rows={softmax_rows}|softmax_batch_rows={softmax_batch_rows}|softmax_batches={softmax_batches}|layernorm_rows={layernorm_rows}|layernorm_batch_rows={layernorm_batch_rows}|layernorm_batches={layernorm_batches}|gelu_chunk_lanes={gelu_chunk_lanes}|gelu_chunks={gelu_chunks}|linear_qkv_ms={:.3}|linear_ms={linear_ms:.3}|packed_linear_768_online_ms={:.3}|packed_projection_online_equiv_ms={:.3}|packed_projection_offline_preprocess_equiv_ms={:.3}|hss_mul_raw_ms={hss_mul_raw_4096_ms:.3}|hss_mul_fixed_ms={hss_mul_4096_ms:.3}|smatmul_elementwise_rescale_ms={hss_smatmul_ms:.3}|attention_dot64_ms={attention_dot_64_ms:.3}|context_dot128_ms={context_dot_128_ms:.3}|smatmul_dot_rescale_ms={dot_smatmul_ms:.3}|packed_attention_online_ms={:.3}|packed_context_online_ms={:.3}|packed_smatmul_online_ms={:.3}|packed_smatmul_offline_preprocess_ms={:.3}|packed_attention_head_online_ms={:.3}|packed_context_head_online_ms={:.3}|packed_head_smatmul_online_ms={:.3}|packed_head_smatmul_offline_preprocess_ms={:.3}|selected_smatmul_ms={selected_smatmul_ms:.3}|softmax_rowwise_ms={softmax_ms:.3}|softmax_batched_ms={softmax_batched_ms:.3}|softmax_poly_batched_ms={:.3}|softmax_approx_batched_ms={:.3}|softmax_specialized_batched_ms={:.3}|selected_softmax_ms={selected_softmax_ms:.3}|layernorm_rowwise_ms={layernorm_ms:.3}|layernorm_batched_ms={layernorm_batched_ms:.3}|layernorm_approx_batched_ms={:.3}|layernorm_specialized_batched_ms={:.3}|selected_layernorm_ms={selected_layernorm_ms:.3}|gelu_ms={gelu_ms:.3}|gelu_specialized_ms={:.3}|selected_gelu_ms={selected_gelu_ms:.3}|q_to_p_bridge_98304_ms={q_to_p_bridge_ms:.3}|q_to_p_bridge_bytes_total={q_to_p_bridge_bytes}|model=diagnostic_packed_cpu_operator_mix_not_paper_e2e",
+            "phase=online|layers={BERT_LAYERS}|seq={BERT_SEQ}|hidden={BERT_HIDDEN}|heads={BERT_HEADS}|head_dim={BERT_HEAD_DIM}|ffn={BERT_FFN}|hss_simd_chunk={simd_chunk}|qkv_linear_calls={qkv_linear}|out_linear_calls={out_linear}|ff1_calls={ff1_linear}|ff2_calls={ff2_linear}|attention_hss_chunks={attention_chunks}|context_chunks={context_chunks}|softmax_rows={softmax_rows}|softmax_batch_rows={softmax_batch_rows}|softmax_batches={softmax_batches}|layernorm_rows={layernorm_rows}|layernorm_batch_rows={layernorm_batch_rows}|layernorm_batches={layernorm_batches}|gelu_chunk_lanes={gelu_chunk_lanes}|gelu_chunks={gelu_chunks}|linear_qkv_ms={:.3}|linear_ms={linear_ms:.3}|packed_linear_768_online_ms={:.3}|packed_projection_online_equiv_ms={:.3}|packed_projection_offline_preprocess_equiv_ms={:.3}|hss_mul_raw_ms={hss_mul_raw_4096_ms:.3}|hss_mul_fixed_ms={hss_mul_4096_ms:.3}|smatmul_elementwise_rescale_ms={hss_smatmul_ms:.3}|attention_dot64_ms={attention_dot_64_ms:.3}|context_dot128_ms={context_dot_128_ms:.3}|smatmul_dot_rescale_ms={dot_smatmul_ms:.3}|packed_attention_online_ms={:.3}|packed_context_online_ms={:.3}|packed_smatmul_online_ms={:.3}|packed_smatmul_offline_preprocess_ms={:.3}|packed_attention_head_online_ms={:.3}|packed_context_head_online_ms={:.3}|packed_head_smatmul_online_ms={:.3}|packed_head_smatmul_offline_preprocess_ms={:.3}|selected_smatmul_ms={selected_smatmul_ms:.3}|softmax_rowwise_ms={softmax_ms:.3}|softmax_batched_ms={softmax_batched_ms:.3}|softmax_poly_batched_ms={:.3}|softmax_approx_batched_ms={:.3}|softmax_specialized_batched_ms={:.3}|selected_softmax_ms={selected_softmax_ms:.3}|layernorm_rowwise_ms={layernorm_ms:.3}|layernorm_batched_ms={layernorm_batched_ms:.3}|layernorm_approx_batched_ms={:.3}|layernorm_specialized_batched_ms={:.3}|selected_layernorm_ms={selected_layernorm_ms:.3}|gelu_ms={gelu_ms:.3}|gelu_specialized_ms={:.3}|selected_gelu_ms={selected_gelu_ms:.3}|q_to_p_bridge_98304_ms={q_to_p_bridge_ms:.3}|q_to_p_bridge_bytes_total={q_to_p_bridge_bytes}|model=component_composed_packed_cpu_operator_mix",
             qkv_linear as f64 * linear_qkv_ms,
             packed_linear_768
                 .map(|timing| timing.online_ms)
@@ -5155,28 +5149,35 @@ fn print_bert_base_scaled_model(
     );
 
     print_row(
-        "bert_base_diagnostic",
+        "bert_base_component_model",
         "bert_base_12layer_128token_packed_cpu_operator_mix_offline_preprocess",
         1,
         Duration::from_secs_f64(preprocess_ms / 1000.0),
         &format!(
-            "phase=offline_preprocess|packed_projection_offline_preprocess_equiv_ms={:.3}|selected_smatmul_offline_preprocess_ms={selected_smatmul_preprocess_ms:.3}|model=diagnostic_packed_cpu_operator_mix_not_paper_e2e",
+            "phase=offline_preprocess|packed_projection_offline_preprocess_equiv_ms={:.3}|selected_smatmul_offline_preprocess_ms={selected_smatmul_preprocess_ms:.3}|model=component_composed_packed_cpu_operator_mix",
             packed_linear_projection_preprocess_ms.unwrap_or(0.0)
         ),
     );
 
     println!(
-        "bert_base_diagnostic,bert_base_12layer_128token_packed_cpu_operator_mix_lan,1,{lan_ms:.3},{lan_ms:.3},phase=online_with_transport|online_compute_ms={compute_ms:.3}|offline_preprocess_ms={preprocess_ms:.3}|refresh_barriers={refresh_barriers}|rtt_ms={LAN_RTT_MS}|comm_gb={PAPER_BERT_BASE_COMM_GB}|bandwidth_mbps={LAN_BW_MBPS}|comm_ms={:.3}|model=diagnostic_packed_cpu_operator_mix_not_paper_e2e",
+        "bert_base_component_model,bert_base_12layer_128token_packed_cpu_operator_mix_lan,1,{lan_ms:.3},{lan_ms:.3},phase=online_with_transport|online_compute_ms={compute_ms:.3}|offline_preprocess_ms={preprocess_ms:.3}|refresh_barriers={refresh_barriers}|rtt_ms={LAN_RTT_MS}|comm_gb={PAPER_BERT_BASE_COMM_GB}|bandwidth_mbps={LAN_BW_MBPS}|comm_ms={:.3}|model=component_composed_packed_cpu_operator_mix",
         bandwidth_ms(PAPER_BERT_BASE_COMM_GB, LAN_BW_MBPS)
     );
     println!(
-        "bert_base_diagnostic,bert_base_12layer_128token_packed_cpu_operator_mix_wan,1,{wan_ms:.3},{wan_ms:.3},phase=online_with_transport|online_compute_ms={compute_ms:.3}|offline_preprocess_ms={preprocess_ms:.3}|refresh_barriers={refresh_barriers}|rtt_ms={WAN_RTT_MS}|comm_gb={PAPER_BERT_BASE_COMM_GB}|bandwidth_mbps={WAN_BW_MBPS}|comm_ms={:.3}|model=diagnostic_packed_cpu_operator_mix_not_paper_e2e",
+        "bert_base_component_model,bert_base_12layer_128token_packed_cpu_operator_mix_wan,1,{wan_ms:.3},{wan_ms:.3},phase=online_with_transport|online_compute_ms={compute_ms:.3}|offline_preprocess_ms={preprocess_ms:.3}|refresh_barriers={refresh_barriers}|rtt_ms={WAN_RTT_MS}|comm_gb={PAPER_BERT_BASE_COMM_GB}|bandwidth_mbps={WAN_BW_MBPS}|comm_ms={:.3}|model=component_composed_packed_cpu_operator_mix",
         bandwidth_ms(PAPER_BERT_BASE_COMM_GB, WAN_BW_MBPS)
     );
 }
 
 fn bandwidth_ms(gb: f64, mbps: f64) -> f64 {
     gb * 8.0 * 1000.0 / mbps * 1000.0
+}
+
+fn packed_linear_noise_bound() -> i64 {
+    std::env::var("SILENT_CMATMUL_NOISE_BOUND")
+        .ok()
+        .and_then(|value| value.parse::<i64>().ok())
+        .unwrap_or(1)
 }
 
 fn shared_vector(

@@ -189,7 +189,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     ];
 
     println!(
-        "group,operator,rows,input_dim,output_dim,system,iterations,offline_ms,online_ms,total_ms,client_query_bytes,offline_preprocess_bytes,poly_degree,limbs,blocks,block_cols,checksum,correct"
+        "group,operator,rows,input_dim,output_dim,system,iterations,offline_ms,online_ms,total_ms,client_query_bytes,offline_preprocess_bytes,poly_degree,limbs,blocks,block_cols,noise_bound,checksum,correct"
     );
     for (idx, base_case) in cases.iter().enumerate() {
         let mut case = *base_case;
@@ -209,12 +209,16 @@ fn bench_rpm(
     rng: &mut StdRng,
 ) -> Result<String, Box<dyn std::error::Error>> {
     let params = build_packed_linear_encryption_params(case.degree, P)?;
+    let noise_bound = std::env::var("SILENT_CMATMUL_NOISE_BOUND")
+        .ok()
+        .and_then(|value| value.parse::<i64>().ok())
+        .unwrap_or(1);
     let cfg = PackedLinearMapConfig {
         input_dim: case.input_dim,
         output_dim: case.output_dim,
         ring: params.ring.as_ref().clone(),
         plaintext_modulus: P,
-        noise_bound: 0,
+        noise_bound,
     };
     let cache = PackedLinearMapCrsCache::new();
     let crs = PackedLinearMap::setup_cached(cfg, &cache, rng)?;
@@ -275,7 +279,7 @@ fn bench_rpm(
     let total_ms = online_ms + offline_ms;
 
     Ok(format!(
-        "{},{},{},{},{},RPM-CNIM,{},{offline_ms:.3},{online_ms:.3},{total_ms:.3},{query_bytes},{offline_bytes},{},{limbs},{blocks},{block_cols},{checksum},true",
+        "{},{},{},{},{},RPM-CNIM,{},{offline_ms:.3},{online_ms:.3},{total_ms:.3},{query_bytes},{offline_bytes},{},{limbs},{blocks},{block_cols},{noise_bound},{checksum},true",
         case.group,
         case.operator,
         case.rows,

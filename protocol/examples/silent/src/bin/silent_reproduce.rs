@@ -28,13 +28,15 @@ use std::time::{Duration, Instant};
 use tokio::runtime::{Builder, Runtime};
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let (iterations, mode) = parse_cli()?;
+    let (iterations, mode, include_legacy_diagnostics) = parse_cli()?;
 
     println!("section,case,iterations,total_ms,avg_ms,extra");
     bench_linear_map(iterations, mode)?;
     bench_hss_mul(iterations, mode)?;
-    bench_lookup_and_trunc(iterations, mode)?;
-    bench_transformer_nonlinears(iterations, mode)?;
+    if include_legacy_diagnostics {
+        bench_lookup_and_trunc(iterations, mode)?;
+        bench_transformer_nonlinears(iterations, mode)?;
+    }
     bench_runtime_transport(iterations, mode)?;
     print_barrier_model();
     Ok(())
@@ -105,7 +107,7 @@ impl ExperimentMode {
     }
 }
 
-fn parse_cli() -> Result<(usize, ExperimentMode), Box<dyn std::error::Error>> {
+fn parse_cli() -> Result<(usize, ExperimentMode, bool), Box<dyn std::error::Error>> {
     let mut args = std::env::args().skip(1).peekable();
     let mut iterations = std::env::var("ITERATIONS")
         .ok()
@@ -115,9 +117,14 @@ fn parse_cli() -> Result<(usize, ExperimentMode), Box<dyn std::error::Error>> {
         .ok()
         .map(|value| ExperimentMode::parse(&value))
         .transpose()?;
+    let mut include_legacy_diagnostics = std::env::var("SILENT_LEGACY_DIAGNOSTICS")
+        .ok()
+        .map(|value| matches!(value.as_str(), "1" | "true" | "TRUE" | "yes" | "YES"))
+        .unwrap_or(false);
 
     while let Some(arg) = args.next() {
         match arg.as_str() {
+            "--legacy-diagnostics" => include_legacy_diagnostics = true,
             "--mode" | "--profile" => {
                 let value = args
                     .next()
@@ -143,6 +150,7 @@ fn parse_cli() -> Result<(usize, ExperimentMode), Box<dyn std::error::Error>> {
             .unwrap_or_else(|| mode.default_iterations())
             .max(1),
         mode,
+        include_legacy_diagnostics,
     ))
 }
 

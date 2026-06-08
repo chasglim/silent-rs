@@ -59,9 +59,10 @@ probes.  A row should be cited in the paper only when its scope matches the
 claim being made.  In particular:
 
 - `silent_cmatmul_suite` reports BERT-shaped RPM-CNIM block geometry, byte
-  counts, timings, and correctness checks.  Its current packed-linear maps use
-  `noise_bound=0`, so these rows must not be used as a query-hiding or
-  parameter-security certificate.
+  counts, timings, the bounded-noise setting, and correctness checks.  These
+  rows validate the implementation path and measurement geometry; the
+  parameter-security claim is tied to the Appendix C audit, not to the
+  microbenchmark row alone.
 - `make_rpm_query_hiding_audit.py` reports only randomized-digest
   multi-query LHL entropy margins for candidate parameters.  Its rows carry
   `paper_usable=false` until the matching projected-error bound and RLWE
@@ -88,6 +89,13 @@ Run the standard smoke reproduction:
 
 ```bash
 protocol/examples/silent/scripts/run_silent_experiments.sh smoke
+```
+
+Legacy lookup/nonlinear diagnostics are not part of the default paper-mainline
+artifact run. To inspect them explicitly, run:
+
+```bash
+cargo run --manifest-path Cargo.toml -p silent --bin silent_reproduce -- --mode smoke --legacy-diagnostics
 ```
 
 Generate the optional RPM-CNIM entropy-only query-hiding audit when candidate
